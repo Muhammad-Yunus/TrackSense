@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>Track Sense</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="css/style.default.css" rel="stylesheet">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3tTkGIkygbID03YAVL-T45vn5yqTK5lc&v=3.exp"></script>
+        
+    </head>
+    <body onload="dataTracker()">
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                	<span class="glyphicon glyphicon-globe"></span> 
+                	 Track Sense</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="#"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="browse.html"><span class="glyphicon glyphicon-cog"></span> Setting</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        	<span class="glyphicon glyphicon-th-list"></span> Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="tracking.html"><span class="glyphicon glyphicon-map-marker"></span> Tracking</a>
+                            </li>
+                            <li>
+                                <a href="geofencing.html"><span class="glyphicon glyphicon-flag"></span> Geofencing</a>
+                            </li>                            
+                            <li>
+                                <a href="alert.html"><span class="glyphicon glyphicon-bell"></span> Alert </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        	<span class="glyphicon glyphicon-wrench"></span> Manage<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="device.html"><span class="glyphicon glyphicon-phone"></span> Device</a>
+                            </li>
+                            <li>
+                                <a href="user.html"><span class="glyphicon glyphicon-user"></span> User</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                	<li>
+                        <button type="button" class="btn btn-success btn-sm navbar-btn">
+          					<span class="glyphicon glyphicon-refresh" ></span> Auto Refresh
+        				</button>
+                	</li>
+                    <li>
+                    	<p class="navbar-text"><span class="glyphicon glyphicon-user"></span> myunus@ppu.co.id</p>
+                    </li>
+                    <li>
+                        <a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <div class="row">
+            <div class="col-xs-12  col-md-4">
+                <div class="container">
+                    <div class="well">
+                        <form>
+                            <h4>Device Manager</h4>
+                            <div class="form-group ">
+                                <label class="sr-only" for="searchText">Search</label>
+                                <input type="text" class="form-control input-sm" id="searchText" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">
+                                <i class="glyphicon glyphicon-plus"></i> Add Device
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <div class="container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span class="glyphicon glyphicon-ok" style="color:#00cc44"></span> 
+                             [Active] GPS Tracking Device</div>
+                        <div class="panel-body">
+                            <div class="container">
+                                <table class="table table-hover" id="list_active">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span class="glyphicon glyphicon-remove" style="color:#ff1a1a"></span>
+                             [Idle] GPS Tracking Device</div>
+                        <div class="panel-body">
+                            <div class="container">
+                                <table class="table table-hover" id="list_idle">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">New Device</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="well">
+                            <form>
+                                <div class="form-group">
+                                    <label for="usr">Device EUI :</label>
+                                    <input type="text" class="form-control" id="usr">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Token Key : </label>
+                                    <input type="password" class="form-control" id="pwd">
+                                </div>
+                                <div class="form-group">
+                                    <label for="typ">Device Type :</label></br>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optradio"> Vehicle Tracker
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optradio"> Personal Tracker
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-default">
+                                <span class="glyphicon glyphicon-send"></span> Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+            function dataTracker(){
+                var data = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+                console.log(data);
+                var list_active = document.getElementById("list_active");
+                var list_idle = document.getElementById("list_idle");
+                var activeHTML = '<thead><tr><th>Device EUI</th><th>Device Type</th><th>Device Status</th><th>Action</th></tr></thead><tbody>' , idleHTML = '<thead><tr><th>Device EUI</th><th>Device Type</th><th>Device Status</th><th>Action</th></tr></thead><tbody>', statIco = " ", color = " ", visibility = "open";
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].stat == "active") { 
+                        statIco = "glyphicon glyphicon-ok";
+                        color = "#00cc44";
+                    }
+                    else { 
+                        statIco = "glyphicon glyphicon-remove";
+                        color = "#ff1a1a";
+                        data[i].stat = "idle";                        
+                    }
+                    if (data[i].stat == "active"){
+                        activeHTML+=  '<tr><td>'
+                                + data[i].eui + '</td><td>'
+                                + data[i].type + '</td><td>'
+                                + data[i].stat + '</td><td>'
+                                + '<span class="glyphicon glyphicon-cog">'
+                                + ' <span class="glyphicon glyphicon-signal">'
+                                + ' <span class="glyphicon glyphicon-off">'
+                                + ' <span class="glyphicon glyphicon-remove">' + '</td></tr>';
+                    }else{
+                        idleHTML+=  '<tr><td>'
+                                + data[i].eui + '</td><td>'
+                                + data[i].type + '</td><td>'
+                                + data[i].stat + '</td><td>'
+                                + '<span class="glyphicon glyphicon-cog">'
+                                + ' <span class="glyphicon glyphicon-signal">'
+                                + ' <span class="glyphicon glyphicon-off">'
+                                + ' <span class="glyphicon glyphicon-remove">' + '</td></tr>';
+                    }
+                }
+                list_active.innerHTML = activeHTML + '</tbody>';
+                list_idle.innerHTML = idleHTML + '</tbody>';
+            }
+        </script>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+    </body>
+</html>

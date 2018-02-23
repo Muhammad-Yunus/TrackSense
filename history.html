@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>Track Sense</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="css/style.default.css" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+    </head>
+    <body onload="loadfirst()">
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                	<span class="glyphicon glyphicon-globe"></span> 
+                	 Track Sense</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="#"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="browse.html"><span class="glyphicon glyphicon-cog"></span> Setting</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        	<span class="glyphicon glyphicon-th-list"></span> Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="tracking.html"><span class="glyphicon glyphicon-map-marker"></span> Tracking</a>
+                            </li>
+                            <li>
+                                <a href="geofencing.html"><span class="glyphicon glyphicon-flag"></span> Geofencing</a>
+                            </li>                            
+                            <li>
+                                <a href="alert.html"><span class="glyphicon glyphicon-bell"></span> Alert </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        	<span class="glyphicon glyphicon-wrench"></span> Manage<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="device.html"><span class="glyphicon glyphicon-phone"></span> Device</a>
+                            </li>
+                            <li>
+                                <a href="user.html"><span class="glyphicon glyphicon-user"></span> User</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a>
+                    </li>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right">
+                	<li>
+                        <button type="button" class="btn btn-success btn-sm navbar-btn">
+          					<span class="glyphicon glyphicon-refresh" ></span> Auto Refresh
+        				</button>
+                	</li>
+                    <li>
+                    	<p class="navbar-text"><span class="glyphicon glyphicon-user"></span> myunus@ppu.co.id</p>
+                    </li>
+                    <li>
+                        <a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="container">
+                    <div class="well">
+                        <form>
+                            <h4>Device History</h4>
+                            <div class="form-group ">
+                                <label class="sr-only" for="searchText">Search</label>
+                                <input type="text" class="form-control input-sm" id="searchText" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-filter"></i> Filter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#gpsinfo">
+                            <i class="glyphicon glyphicon-map-marker"></i> GPS Info</a>
+                        </li>
+                        <li><a data-toggle="tab" href="#lora">
+                            <i class="glyphicon glyphicon-signal"></i> LoRa</a>
+                        </li> 
+                        <li><a data-toggle="tab" href="#battery">
+                            <i class="glyphicon glyphicon-flash"></i> Battery</a>
+                        </li>   
+                    </ul>
+                    <div class="divider10"></div>
+                    <div class="tab-content">
+                        <div id="gpsinfo" class="tab-pane fade in active">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><b>Receive Frames</b></div>
+                                <div class="panel-body">
+                                    <div class="container">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>EUI</th><th>Type</th><th>Status</th><th>Date Time</th><th>Report</th><th>Lat</th><th>lon</th><th>Speed (mph)</th><th>Travelled Distance (km)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="receiveFrames">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lora" class="tab-pane fade">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><b>Receive Frames</b></div>     
+                                <div class="panel-body">
+                                    <div class="container">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>EUI</th><th>Date TIme</th><th>RSSI (dBm)</th><th>SNR (dBi)</th><th>Freq (MHz)</th><th>Radio</th><th>Fcnt</th><th>Datarate</th><th>C/R</th><th>Payload</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="receiveLoRa">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                       
+                            </div>
+                        </div>
+                        <div id="battery" class="tab-pane fade">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><b>Receive Frames</b></div>     
+                                <div class="panel-body">
+                                    <div class="container">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>EUI</th><th>Date TIme</th><th>Current (mAh)</th><th>Capacity (mAh)</th><th>Percentage (%)</th><th>Health</th><th>Time Left</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="receiveBattery">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/javascript">
+        function loadfirst(){
+            var activeData = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+            var rfHTML = " ", rgHTML = " ", rbHTML = " ";
+                for (var x = 0; x < activeData.length; x++){
+                        var tc = new Date(activeData[x].ts*1000);
+                        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                        var timeContent = tc.getDate() + ' ' + months[tc.getMonth()] + ' ' + tc.getFullYear() + ' ' + tc.getHours() + ':' + tc.getMinutes() + ':' + tc.getSeconds();
+
+                        var statContent = " ";
+                        if (activeData[x].stat == "active"){
+                            statContent += '<i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>'; 
+                        }
+                        else {
+                            statContent += '<i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>'; 
+                        }
+                        var healthContent = " ";
+                        if (activeData[x].battery.health){
+                            healthContent += '<i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>'; 
+                        }
+                        else {
+                            healthContent += '<i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>'; 
+                        }
+                        var battTLContent = " ";
+                        var diff2 = activeData[x].battery.timeleft;
+                        var days2 = Math.floor(diff2/86400);
+                        if (days2 != 0) battTLContent += days2 + " d ";
+                        var h2 = (diff2 - days2*86400);
+                        var hours2 = Math.floor(h2/3600);
+                        if (hours2 != 0) battTLContent += hours2 + " h ";
+                        var m2 = (h2 - hours2*3600);
+                        var minutes2 = Math.floor(m2/60);
+                        if (minutes2 != 0) battTLContent += minutes2 + " m ";
+                        var seconds2 = Math.floor(m2 - minutes2*60);
+                        if (seconds2 != 0) battTLContent += seconds2 + " s";
+
+                        rfHTML += '<tr><td>' + activeData[x].eui + '</td><td>' + activeData[x].type + '</td><td>' + statContent + '</td><td>' + timeContent + '</td><td>' + activeData[x].report + '</td><td>' + activeData[x].lat + '</td><td>' + activeData[x].lon + '</td><td>' + activeData[x].speed + '</td><td>' + activeData[x].distance + '</td></tr>';
+                        
+                        rgHTML += '<tr><td>' + activeData[x].eui + '</td><td>' + timeContent + '</td><td>' + activeData[x].lora.rssi + '</td><td>' + activeData[x].lora.snr + '</td><td>' + activeData[x].lora.frequency + '</td><tD>' + activeData[x].lora.radio + '</td><td>' + activeData[x].lora.fcnt + '</td><td>' + activeData[x].lora.datarate + '</td><td>' + activeData[x].lora.cpr + '</td><td>' + activeData[x].lora.payload + '</td></tr>';
+
+                        rbHTML += '<tr><td>' + activeData[x].eui + '</td><td>' + timeContent + '</td><td>' + activeData[x].battery.current + '</td><td>' + activeData[x].battery.capacity + '</td><td>' + activeData[x].battery.percentage + '</td><td>' + healthContent + '</td><td>' + battTLContent + " left" + '</td></tr>';    
+                        // $("#thisLog").html(JSON.stringify(activeData[x]));
+
+                }
+                $(".receiveFrames").html(rfHTML);
+                $(".receiveLoRa").html(rgHTML);
+                $(".receiveBattery").html(rbHTML);
+        }
+        </script>
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+    </body>
+</html>

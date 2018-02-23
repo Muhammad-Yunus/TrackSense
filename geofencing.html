@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>Track Sense</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="css/style.default.css" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3tTkGIkygbID03YAVL-T45vn5yqTK5lc&libraries=drawing">
+        </script>
+
+    </head>
+
+   <body>
+         <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                  <span class="glyphicon glyphicon-globe"></span> 
+                   Track Sense</a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="browse.html"><span class="glyphicon glyphicon-cog"></span> Setting</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                           <span class="glyphicon glyphicon-th-list"></span> Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="tracking.html"><span class="glyphicon glyphicon-map-marker"></span> Tracking</a>
+                            </li>
+                            <li>
+                                <a href="geofencing.html"><span class="glyphicon glyphicon-flag"></span> Geofencing</a>
+                            </li>                            
+                            <li>
+                                <a href="alert.html"><span class="glyphicon glyphicon-bell"></span> Alert </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                           <span class="glyphicon glyphicon-wrench"></span> Manage<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="device.html"><span class="glyphicon glyphicon-phone"></span> Device</a>
+                            </li>
+                            <li>
+                                <a href="user.html"><span class="glyphicon glyphicon-user"></span> User</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a>
+                    </li>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right">
+                  <li>
+                        <button type="button" class="btn btn-success btn-sm navbar-btn">
+                        <span class="glyphicon glyphicon-refresh" ></span> Auto Refresh
+                  </button>
+                  </li>
+                    <li>
+                     <p class="navbar-text"><span class="glyphicon glyphicon-user"></span> myunus@ppu.co.id</p>
+                    </li>
+                    <li>
+                        <a href="login.html"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                    </li>
+                </ul>
+            </div>
+         </nav>
+         <div id="map-canvas-left"></div>
+         <div class="visible-lg visible-md">
+            <div id="search-box">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <label class="sr-only" for="searchText">Search</label>
+                        <input type="text" class="form-control input-sm" id="searchText" placeholder="Search Location">
+                    </div>
+                    <button type="submit" class="btn btn-default btn-sm">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div id="sidemenu" class="well">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                     <h3 align="center"><span class="glyphicon glyphicon-flag"></span> Geofencing Mode</h3>
+                        <div class="btn-group btn-group-justified btn-group-sm">
+                          <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal"> <i class="glyphicon glyphicon-plus"></i> Add </a>
+                          <a class="btn btn-default" data-toggle="modal" data-target="#manageGeofencing"><i class="glyphicon glyphicon-cog"></i> Manage </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group point-list-view" id="myHTMLWrapper">
+                </div>
+            </div>
+         </div>
+         <div class="visible-lg visible-md">
+         <div id="showbutton" class="well">
+            <div class="checkbox">
+               <input type="checkbox" value="" data-toggle="collapse" data-target="#demo">
+               <i> Hide Tracker Info?</i>
+            </div>
+         </div>
+         </div>
+         <div id="demo" class="collapse in">
+           <div class="visible-lg visible-md">
+            <div id="bottommenu" class="well">
+                  <ul class="nav nav-tabs">
+                     <li><a data-toggle="tab" href="#lora">
+                        <i class="glyphicon glyphicon-signal"></i> LoRa</a>
+                     </li> 
+                     <li><a data-toggle="tab" href="#gpsinfo">
+                        <i class="glyphicon glyphicon-map-marker"></i> GPS Info</a>
+                     </li>
+                     <li><a data-toggle="tab" href="#battery">
+                        <i class="glyphicon glyphicon-flash"></i> Battery</a>
+                     </li>    
+                     <li><a data-toggle="tab" href="#devicelog">
+                        <i class="glyphicon glyphicon-list-alt"></i> Device Log</a>
+                     </li>
+                        <li class="pull-right"><a><i class="glyphicon glyphicon-transfer"></i> Receive Data 1s ago</a></li>
+                  </ul>
+              <div class="divider10"></div>
+              <div class="tab-content">
+                <div id="lora" class="tab-pane fade">
+                  <div class="row">
+                    <div class="col-md-6"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <label>RSSI : </label> <p id="thisRssi"></p></br>
+                          <label>SNR : </label> <p id="thisSnr"></p></br>
+                          <label>Frequency : </label> <p id="thisFrequency"></p> MHz </br>
+                          <label>Radio : </label> <p id="thisRadio"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="panel panel-default">
+                        <div class="panel-body">    
+                          <label>FCNT : </label> <p id="thisFcnt"></p> </br>
+                          <label>Datarate :</label> <p id="thisDr"></p></br>
+                          <label>CR : </label> <p id="thisCpr"></p> </br>
+                          <label>Payload : </label> <p id="thisPayload"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>    
+                </div>
+                <div id="gpsinfo" class="tab-pane fade">
+                  <div class="row">
+                    <div class="col-md-3"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <label>EUI : </label> <p id="thisEui"></p> </br>
+                          <label>Time : </label> <p id="thisTs"></p> </br>
+                          <label>Type : </label> <p id="thisType"></p> </br>
+                          <label>Status : </label> <p id="thisStat"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <label>Lat : </label> <p id="thisLat"></p> </br>
+                          <label>Lon : </label> <p id="thisLon"></p> </br>
+                          <label>Speed : </label> <p id="thisSpeed"></p> mph</br>
+                          <label>Travelled Distance : </label> <p id="thisDistance"></p> km
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <a id="update" href="#"><i class="glyphicon glyphicon-refresh" style="color:red"></i></a>
+                          <label>Last Recv. : </label> <p id="thisLastRecv"></p> 
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body" >
+                          <i class="glyphicon glyphicon glyphicon-check" style="color:red"></i>
+                          <label> Report Type : </label> <p id="thisReport"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="battery" class="tab-pane fade">
+                  <div class="row">
+                    <div class="col-md-4"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <!-- Content Here -->
+                          <label>Current : </label> <p id="thisBattCurrent"></p> mAh </br>
+                          <label>Percentage : </label> <p id="thisBattPercentage"></p>% </br>
+                          <label>Maximum : </label> <p id="thisBattCapacity"></p> mAh </br>
+                          <label>Health : </label> <p id="thisBattHealth"></p></br>
+                          <label>Time Left : </label> <p id="thisBattTL"></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="panel panel-default" style="padding: 0px">
+                        <div class="panel-body" >     
+                          <!-- Content Here -->
+                          <canvas id="myChart"  height="17%"  width="100%"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="devicelog" class="tab-pane fade">
+                  <div class="row">
+                    <div class="col-md-12"> 
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <p id="thisLog"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <!-- modal for add geofencing -->
+        <div class="container">
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog" style="width:60%">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Add Geofencing</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="container">
+                    <div class="well">
+                      <form>
+                        <div class="form-group">
+                          <label for="name">Name : </label></br>
+                          <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="token">Token Key : </label>
+                          <input type="password" class="form-control" id="pwd">
+                        </div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <label for="name">Type : </label></br>
+                              <select class="form-control" id="listType">
+                                <option value="polyline">polyline</option>
+                                <option value="circle">circle</option>
+                                <option value="rectangle">rectangle</option>
+                                <option value="polygon">polygon</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="outlineColor">Outine Color : </label>
+                              <input type="color" class="form-control" id="outlineColor">
+                            </div>
+                            <div class="col-md-2">
+                              <label for="outlineSize">Line Size :</label>
+                              <select class="form-control" id="listOutlineSize">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="fillColor">Fill Color : </label>
+                              <input type="color" class="form-control" id="fillColor">
+                            </div>
+                            <div class="col-md-2">
+                              <label for="fillOpacity">Fill Opacity : </label>
+                              <select class="form-control" id="listFillOpacity">
+                                <option>0</option>
+                                <option>0.1</option>
+                                <option>0.2</option>
+                                <option>0.3</option>
+                                <option>0.4</option>
+                                <option>0.5</option>
+                                <option>0.6</option>
+                                <option>0.7</option>
+                                <option>0.8</option>
+                                <option>0.9</option>
+                                <option>1.0</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="option">Option : </label></br>
+                              <label class="checkbox-inline"><input type="checkbox" id="editOption">Edit</label>
+                              <label class="checkbox-inline"><input type="checkbox" id="clickOption">Click</label>
+                            </div>
+                          </div>
+                        </div>  
+                        <div class="form-group">
+                          <div class="container clicked">
+                            <b>Apply</b> to Geofencing Map <b style="color: #00f">[click]</b>
+                          </div>
+                          <div id="map-canvas-right"></div>
+                        </div>  
+                        <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-send"></span> Submit</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal for manage geofencing -->
+        <div class="container">
+          <div class="modal fade" id="manageGeofencing" role="dialog">
+            <div class="modal-dialog" style="width:90%;">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Manage Geofencing</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="container">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Name</th><th>Type</th><th>Location</th><th>Color</th><th>Size</th><th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>geofencing001</td><td>polygon</td><td>{{-6.2317, 102.8747},{-6.2317, 102.8747},{-6.2317, 102.8747},{-6.2317, 102.8747}}</td><td><hr style="border-top: 3px solid red"></td><td>2px</td><td><span class="glyphicon glyphicon-cog"></span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="js/jquery-1.10.2.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="ext/customScroll/js/jquery.mCustomScrollbar.min.js"></script>
+      <script src="ext/customScroll/js/jquery.mousewheel.min.js"></script>
+      <script>
+         Chart.defaults.global.defaultFontStyle = 'Bold'
+         var ctx = document.getElementById('myChart').getContext('2d');
+         var chart = new Chart(ctx, {
+             // The type of chart we want to create
+             type: 'line',
+
+             // The data for our dataset
+             data: {
+                 labels: ["January", "February", "March", "April", "May", "June", "July"],
+                 datasets: [{
+                     label: "Battery Level History",
+                     backgroundColor: 'rgb(0, 0, 0, 0.01)',
+                     borderColor: '#00cc44',
+                     data: [19000, 18090, 17600, 14000, 13620, 13000, 10000],
+                 }]
+             },
+
+             options: {}
+         });
+      </script>
+      <script>
+         listTracker();
+         function listTracker(){
+            var data = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+            var wrapper = document.getElementById("myHTMLWrapper");
+            var myHTML = '' , statIco = " ", color = " ", visibility = "open";
+            for (var i = 0; i < data.length; i++) {
+                    if(data[i].mode.geofencing == true) color = "#00cc44";
+                    else color = "#ff1a1a";
+               myHTML+='<div class="list-group-item point-item '
+                     +'"><h4 class="list-group-item-heading"><span class="glyphicon glyphicon-flag'
+                     + '" style="color:'+ color +'"></span>  ' 
+                     + data[i].eui + '</h4>' +'<p class="list-group-item-text">' 
+                     + data[i].type +' <span class="pull-right"><span class="glyphicon glyphicon-eye-'
+                     + visibility +'"></span></span></p></div>';
+                }
+                wrapper.innerHTML = myHTML;
+          }
+          $('.glyphicon-eye-open').click(function(){
+            $(this).toggleClass('glyphicon-eye-open glyphicon-eye-close');
+          });
+          $('.btn-success').click(function(){
+            $(this).toggleClass('btn-success');
+          });
+          $('.list-group-item').on('click', function() {
+            console.log($(this).text().substr(2, 16), $('.list-group').find('.active').text().substr(2, 16));
+              if ($(this).text().substr(2, 16) != $('.list-group').find('.active').text().substr(2, 16)){
+                $('.active').removeClass('active');
+                // control information pannel
+            }
+              $(this).toggleClass('active');
+              var activeData = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+              for (var x = 0; x < activeData.length; x++){
+                if(activeData[x].eui == $(this).text().substr(2, 16)){
+                  $("#thisEui").html(activeData[x].eui);
+                  $("#thisLat").html(activeData[x].lat);
+                  $("#thisLon").html(activeData[x].lon);
+                  $("#thisSpeed").html(activeData[x].speed);
+                  $("#thisDistance").html(activeData[x].distance);
+                  var tc = new Date(activeData[x].ts*1000);
+                  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                  var timeContent = tc.getDate() + ' ' + months[tc.getMonth()] + ' ' + tc.getFullYear() + ' ' + tc.getHours() + ':' + tc.getMinutes() + ':' + tc.getSeconds();
+                  $("#thisTs").html(timeContent);
+                  $("#thisReport").html(activeData[x].report);
+                  $("#thisType").html(activeData[x].type);
+                  var statContent = " ";
+                  if (activeData[x].stat == "active"){
+                    statContent += 'ok <i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>'; 
+                  }
+                  else {
+                    statContent += 'idle <i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>'; 
+                  }
+                  $("#thisStat").html(statContent);
+                  var rssiContent = activeData[x].lora.rssi;
+                  if (activeData[x].lora.rssi < 120){
+                    rssiContent += '/-143 dBm <i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>';
+                  }
+                  else {
+                    rssiContent += '/-143 dBm <i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>';
+                  }
+                  $("#thisRssi").html(rssiContent);
+                  var snrContent = activeData[x].lora.snr;
+                  if (activeData[x].lora.snr > 0){
+                    snrContent += '/-19 dBi <i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>'; 
+                  }
+                  else {
+                    snrContent += '/-19 dBi <i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>'; 
+                  }
+                  $("#thisSnr").html(snrContent);
+                  $("#thisFrequency").html(activeData[x].lora.frequency);
+                  $("#thisRadio").html(activeData[x].lora.radio);
+                  $("#thisFcnt").html(activeData[x].lora.fcnt);
+                  $("#thisDr").html(activeData[x].lora.datarate);
+                  $("#thisCpr").html(activeData[x].lora.cpr);
+                  $("#thisPayload").html(activeData[x].lora.payload);
+                  var lastRecvContent = " ";
+                  var currentTs = Date.now()/1000;
+                  var diff = currentTs - activeData[x].ts;
+                  var days = Math.floor(diff/86400);
+                  if (days != 0) lastRecvContent += days + " d ";
+                  var h = (diff - days*86400);
+                  var hours = Math.floor(h/3600);
+                  if (hours != 0) lastRecvContent += hours + " h ";
+                  var m = (h - hours*3600);
+                  var minutes = Math.floor(m/60);
+                  if (minutes != 0) lastRecvContent += minutes + " m ";
+                  var seconds = Math.floor(m - minutes*60);
+                  if (seconds != 0) lastRecvContent += seconds + " s";
+                  $("#thisLastRecv").html(lastRecvContent + " ago");
+                  $("#thisBattCurrent").html(activeData[x].battery.current);
+                  $("#thisBattPercentage").html(activeData[x].battery.percentage);
+                  $("#thisBattCapacity").html(activeData[x].battery.capacity);
+                  var healthContent = " ";
+                  if (activeData[x].battery.health){
+                    healthContent += 'ok <i class="glyphicon glyphicon-ok" style="color:#00cc44"></i>'; 
+                  }
+                  else {
+                    healthContent += 'bad <i class="glyphicon glyphicon-remove" style="color:#ff1a1a"></i>'; 
+                  }
+                  $("#thisBattHealth").html(healthContent);
+                  var battTLContent = " ";
+                  var diff2 = activeData[x].battery.timeleft;
+                  var days2 = Math.floor(diff2/86400);
+                  if (days2 != 0) battTLContent += days2 + " d ";
+                  var h2 = (diff2 - days2*86400);
+                  var hours2 = Math.floor(h2/3600);
+                  if (hours2 != 0) battTLContent += hours2 + " h ";
+                  var m2 = (h2 - hours2*3600);
+                  var minutes2 = Math.floor(m2/60);
+                  if (minutes2 != 0) battTLContent += minutes2 + " m ";
+                  var seconds2 = Math.floor(m2 - minutes2*60);
+                  if (seconds2 != 0) battTLContent += seconds2 + " s";
+                  $("#thisBattTL").html(  battTLContent + " left");
+                  $("#thisLog").html(JSON.stringify(activeData[x]));
+                }
+              }
+          });
+          $( document ).ready( function() {
+            $( "#update" ).on( "click", function( e ) {
+              var $icon = $( this ).find( ".glyphicon.glyphicon-refresh" );
+              var animateClass="glyphicon-refresh-animate";
+              $icon.addClass( animateClass );
+                window.setTimeout( function() {
+                  $icon.removeClass( animateClass );
+                }, 2000 );
+              });    
+          });
+          $('div.clicked').click(function(){
+            initialize("click");
+          });         
+          function initialize(myinit) {
+            var drawingManager, map, map2, marker = [], k = "z", lastGeoFenchId = 0, tenDataGps = [], lastCityCircle = false, lastFlightPath=false;
+            var gpsLoc = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+
+            var mapOption;
+            if (myinit == "main"){
+               mapOption = {
+                  center : new google.maps.LatLng(gpsLoc[0].lat, gpsLoc[0].lon),
+                  zoom : 15,
+                  mapTypeId : google.maps.MapTypeId.ROADMAP,
+                  mapTypeControlOptions : {
+                     position : google.maps.ControlPosition.RIGHT_TOP,
+                     style : google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+                  },
+                  zoomControlOptions : {
+                     position : google.maps.ControlPosition.RIGHT_BOTTOM
+                  },
+                  panControlOptions : {
+                     position : google.maps.ControlPosition.RIGHT_BOTTOM
+                  }
+               };
+               map = new google.maps.Map(document.getElementById('map-canvas-left'), mapOption);
+               map.mapTypeControlOptions.mapTypeIds = ['roadmap', 'satellite', 'hybrid', 'terrain'];
+            }
+            if (myinit == "click"){
+               console.log($("#editOption").is(':checked') + " " + $("#clickOption").is(':checked'))
+               mapOption = {
+                  center: new google.maps.LatLng(gpsLoc[0].lat, gpsLoc[0].lon),
+                  zoom: 12,
+                  mapTypeId: 'roadmap',
+               };
+                drawingManager = new google.maps.drawing.DrawingManager({
+                                  drawingControl: true,
+                                  drawingControlOptions: {
+                                    position: google.maps.ControlPosition.TOP_CENTER,
+                                    drawingModes: [$("#listType option:selected").val()]
+                                  },
+                                  circleOptions: {
+                                  fillColor: $("#fillColor").val(),
+                                  fillOpacity: $("#listFillOpacity option:selected").val(),
+                                  strokeWeight: $("#listOutlineSize option:selected").val(),
+                                  strokeColor: $("#outlineColor").val(),
+                                  clickable: $("#clickOption").is(':checked'),
+                                  editable: $("#editOption").is(':checked'),
+                                  zIndex: 1
+                                },
+                                  polylineOptions: {
+                                  fillColor: $("#fillColor").val(),
+                                  fillOpacity: $("#listFillOpacity option:selected").val(),
+                                  strokeWeight: $("#listOutlineSize option:selected").val(),
+                                  strokeColor: $("#outlineColor").val(),
+                                  clickable: $("#clickOption").is(':checked'),
+                                  editable: $("#editOption").is(':checked'),
+                                  zIndex: 1
+                                },
+                                  rectangleOptions: {
+                                  fillColor: $("#fillColor").val(),
+                                  fillOpacity: $("#listFillOpacity option:selected").val(),
+                                  strokeWeight: $("#listOutlineSize option:selected").val(),
+                                  strokeColor: $("#outlineColor").val(),
+                                  clickable: $("#clickOption").is(':checked'),
+                                  editable: $("#editOption").is(':checked'),
+                                  zIndex: 1
+                                },
+                                  polygonOptions: {
+                                  fillColor: $("#fillColor").val(),
+                                  fillOpacity: $("#listFillOpacity option:selected").val(),
+                                  strokeWeight: $("#listOutlineSize option:selected").val(),
+                                  strokeColor: $("#outlineColor").val(),
+                                  clickable: $("#clickOption").is(':checked'),
+                                  editable: $("#editOption").is(':checked'),
+                                  zIndex: 1
+                                }
+              });
+              map2 = new google.maps.Map(document.getElementById('map-canvas-right'), mapOption);
+              drawingManager.setMap(map2);
+            }
+            // setInterval(moveMarker, 4000);
+            // function moveMarker(){
+               
+            //    var extension, imgsize, j, icon = [], icons = [], contentString = [], infowindow = [], myLatLng = [];
+            //    var gpsLoc = JSON.parse($.ajax({type: "GET", url: "http://localhost/gps/gis/dataTrack.html", async: false}).responseText);
+
+            //    if (k == "z"){
+            //       k = 0;
+            //       for ( j = 0; j < gpsLoc.length; j++){
+            //          if(gpsLoc[j].stat == "active"){
+            //             marker[j] = [0];
+            //          }
+            //       }
+            //    }
+            //    for ( j = 0; j < gpsLoc.length; j++){  
+            //       if(gpsLoc[j].stat == "active"){
+            //       //-------------------------------- UPDATE MARKER POSITION --------------------------
+            //            myLatLng[j] = {lat: gpsLoc[j].lat, lng: gpsLoc[j].lon};
+
+            //             if ( $('.list-group').find('.active').text().substr(2, 16) == gpsLoc[j].eui){
+            //                extension = '.gif';
+            //                imgsize = new google.maps.Size(60, 90);
+            //                //console.log(gpsLoc[j].eui);
+            //             }
+            //             else if ( gpsLoc[j].report == "Help Report"){
+            //                extension = 'sos.png';  
+            //                imgsize = new google.maps.Size(32, 53);
+            //             }
+            //             else {
+            //                extension = '.png';  
+            //                imgsize = new google.maps.Size(32, 53);
+            //             }
+
+            //             icons[j] = 'img/' + gpsLoc[j].eui + extension;  
+            //            icon[j] = {
+            //                url: icons[j], // url
+            //                scaledSize: imgsize, // scaled size
+            //                origin: new google.maps.Point(0,0), // origin
+            //                anchor: new google.maps.Point(0, 0) // anchor
+            //            };
+
+            //            marker[j][k] = new google.maps.Marker({
+            //                map: map,
+            //                optimized: false,
+            //                icon : icon[j]
+            //            });
+
+            //           contentString[j] = '<div style="color:#000"> <p><b>EUI : ' + gpsLoc[j].eui + '</b></br>' +
+            //                           'Lat : ' + (gpsLoc[j].lat).toFixed(6) + '</br>' +
+            //                           'Lon : ' + (gpsLoc[j].lon).toFixed(6) + '</br>' +
+            //                           'Report : ' + gpsLoc[j].report + '</br>' +
+            //                           'Battery : ' + gpsLoc[j].battery + '%</p></div>';
+
+            //            if ( k == 0 && marker[j][1]){
+            //             marker[j][0] = marker[j][k];
+            //             marker[j][0].setPosition(myLatLng[j]);
+            //             marker[j][1].setMap(null);                   
+            //             //console.log("k 0 : " + marker[j][0]);
+            //           }
+            //           else if(k != 0){
+            //             marker[j][1] = marker[j][k];
+            //             marker[j][1].setPosition(myLatLng[j]);
+            //             marker[j][0].setMap(null);
+            //             //console.log("k 1 : " + marker[j][1]);                     
+            //           }
+            //           else {
+            //             marker[j][k].setPosition(myLatLng[j]);
+            //           }
+
+            //            infowindow[j] = new google.maps.InfoWindow({
+            //                content: contentString[j],
+            //                position: myLatLng[j]
+            //            });
+            //            marker[j][k].addListener('click', (function(j,k){
+            //                return function() {
+            //                      infowindow[j].open(map, marker[j][k]);
+            //                };
+            //            })(j,k));
+            //       }
+            //     }
+            //     if (k == 0) k = 1;
+            //     else k = 0;
+            // }
+         }
+         google.maps.event.addDomListener(window, 'load', function(){ initialize('main') });
+         (function($) {
+
+            $(".point-list-view").mCustomScrollbar({
+               scrollButtons : {
+                  enable : true
+               },
+               theme : 'dark-thick',
+               contentTouchScroll : true
+            });
+
+         })(jQuery);
+         </script>
+   </body>
+</html>
